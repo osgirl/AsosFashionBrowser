@@ -13,7 +13,7 @@ public class RestAdapterCreator {
     public RestAdapter createAdapter() {
         return new RestAdapter.Builder()
                 .setEndpoint(endpoint)
-                .setLogLevel(RestAdapter.LogLevel.BASIC)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
     }
 }

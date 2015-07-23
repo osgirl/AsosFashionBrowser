@@ -1,16 +1,39 @@
 package com.horaceb.asosfashionbrowser.model;
 
-import java.util.List;
+import com.google.gson.annotations.SerializedName;
 
 public class Listing {
 
-    private List<Category> categories;
+    @SerializedName("CategoryId")
+    private String categoryId;
 
-    public List<Category> getCategories() {
-        return categories;
+    @SerializedName("Name")
+    private String name;
+
+    @SerializedName("ProductCount")
+    private int productCount;
+
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getProductCount() {
+        return productCount;
+    }
+
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
     }
 }

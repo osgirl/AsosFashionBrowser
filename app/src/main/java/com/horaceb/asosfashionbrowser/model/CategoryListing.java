@@ -1,10 +1,19 @@
 package com.horaceb.asosfashionbrowser.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class CategoryListing {
 
+    @SerializedName("Description")
     private Description description;
 
-    private Listing listing;
+    @SerializedName("Listing")
+    private List<Listing> listing;
+
+    @SerializedName("SortType")
+    private String sortType;
 
     public Description getDescription() {
         return description;
@@ -14,11 +23,19 @@ public class CategoryListing {
         this.description = description;
     }
 
-    public Listing getListing() {
+    public List<Listing> getListing() {
         return listing;
     }
 
-    public void setListing(Listing listing) {
+    public void setListing(List<Listing> listing) {
         this.listing = listing;
+    }
+
+    public String getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
     }
 }

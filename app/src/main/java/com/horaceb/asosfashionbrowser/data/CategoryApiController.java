@@ -21,12 +21,12 @@ public class CategoryApiController implements Callback<CategoryListing> {
 
     @Override
     public void success(CategoryListing categoryListing, Response response) {
-
+        listener.onSuccess();
     }
 
     @Override
     public void failure(RetrofitError error) {
-
+        listener.onError();
     }
 
     public interface OnResultListener {

@@ -5,8 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.horaceb.asosfashionbrowser.R;
-import com.horaceb.asosfashionbrowser.data.CategoryApiController;
-import com.horaceb.asosfashionbrowser.model.Description;
+import com.horaceb.asosfashionbrowser.data.controller.CategoryApiController;
+import com.horaceb.asosfashionbrowser.data.controller.ProductApiController;
+import com.horaceb.asosfashionbrowser.data.controller.ProductByCategoryApiController;
+import com.horaceb.asosfashionbrowser.api.json.Description;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,6 +32,12 @@ public class HomeActivity extends AppCompatActivity implements CategoryApiContro
     public void onButtonClicked() {
         CategoryApiController controller = new CategoryApiController(this);
         controller.getCategories(Description.WOMEN);
+
+        ProductApiController apiController = new ProductApiController();
+        apiController.getProductDetails("catalog01_1000_6930");
+
+        ProductByCategoryApiController productByCategoryApiController = new ProductByCategoryApiController();
+        productByCategoryApiController.getProductByCategory("catalog01_1000_6930");
     }
 
     @Override

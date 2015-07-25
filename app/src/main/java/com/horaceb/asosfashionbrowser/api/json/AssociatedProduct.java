@@ -1,16 +1,17 @@
-package com.horaceb.asosfashionbrowser.model;
+package com.horaceb.asosfashionbrowser.api.json;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-public class Variant {
+public class AssociatedProduct {
 
     @SerializedName("BasePrice")
-    private float basePrice;
+    private BigDecimal basePrice;
 
     @SerializedName("Brand")
-    private Object brand;
+    private String brand;
 
     @SerializedName("Colour")
     private String colour;
@@ -43,121 +44,132 @@ public class Variant {
     private String size;
 
     @SerializedName("Sku")
-    private Object sku;
+    private String sku;
 
     @SerializedName("Title")
-    private Object title;
+    private String title;
 
-    public float getBasePrice() {
+    @SerializedName("ProductType")
+    private String productType;
+
+    public BigDecimal getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(float BasePrice) {
-        this.basePrice = BasePrice;
+    public void setBasePrice(BigDecimal basePrice) {
+        this.basePrice = basePrice;
     }
 
-    public Object getBrand() {
+    public String getBrand() {
         return brand;
     }
 
-    public void setBrand(Object Brand) {
-        this.brand = Brand;
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getColour() {
         return colour;
     }
 
-    public void setColour(String Colour) {
-        this.colour = Colour;
+    public void setColour(String colour) {
+        this.colour = colour;
     }
 
     public String getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(String CurrentPrice) {
-        this.currentPrice = CurrentPrice;
+    public void setCurrentPrice(String currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public boolean isInStock() {
         return inStock;
     }
 
-    public void setInStock(boolean InStock) {
-        this.inStock = InStock;
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
     }
 
     public boolean isIsInSet() {
         return isInSet;
     }
 
-    public void setIsInSet(boolean IsInSet) {
-        this.isInSet = IsInSet;
+    public void setIsInSet(boolean isInSet) {
+        this.isInSet = isInSet;
     }
 
     public String getPreviousPrice() {
         return previousPrice;
     }
 
-    public void setPreviousPrice(String PreviousPrice) {
-        this.previousPrice = PreviousPrice;
+    public void setPreviousPrice(String previousPrice) {
+        this.previousPrice = previousPrice;
     }
 
     public String getPriceType() {
         return priceType;
     }
 
-    public void setPriceType(String PriceType) {
-        this.priceType = PriceType;
+    public void setPriceType(String priceType) {
+        this.priceType = priceType;
     }
 
     public int getProductId() {
         return productId;
     }
 
-    public void setProductId(int ProductId) {
-        this.productId = ProductId;
+    public void setProductId(int productId) {
+        this.productId = productId;
     }
 
     public List<String> getProductImageUrls() {
         return productImageUrls;
     }
 
-    public void setProductImageUrls(List<String> ProductImageUrls) {
-        this.productImageUrls = ProductImageUrls;
+    public void setProductImageUrls(List<String> productImageUrls) {
+        this.productImageUrls = productImageUrls;
     }
 
     public String getRRP() {
         return rrp;
     }
 
-    public void setRRP(String RRP) {
-        this.rrp = RRP;
+    public void setRRP(String rrp) {
+        this.rrp = rrp;
     }
 
     public String getSize() {
         return size;
     }
 
-    public void setSize(String Size) {
-        this.size = Size;
+    public void setSize(String size) {
+        this.size = size;
     }
 
-    public Object getSku() {
+    public String getSku() {
         return sku;
     }
 
-    public void setSku(Object Sku) {
-        this.sku = Sku;
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
-    public Object getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(Object Title) {
-        this.title = Title;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
     }
 
 }

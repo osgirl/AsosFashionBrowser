@@ -5,10 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.horaceb.asosfashionbrowser.R;
-import com.horaceb.asosfashionbrowser.data.CategoryApiController;
-import com.horaceb.asosfashionbrowser.data.ProductApiController;
-import com.horaceb.asosfashionbrowser.data.ProductByCategoryApiController;
-import com.horaceb.asosfashionbrowser.model.Description;
+import com.horaceb.asosfashionbrowser.data.controller.CategoryApiController;
+import com.horaceb.asosfashionbrowser.data.controller.ProductApiController;
+import com.horaceb.asosfashionbrowser.data.controller.ProductByCategoryApiController;
+import com.horaceb.asosfashionbrowser.api.json.Description;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

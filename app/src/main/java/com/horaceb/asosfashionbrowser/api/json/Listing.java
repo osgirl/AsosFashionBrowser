@@ -1,4 +1,4 @@
-package com.horaceb.asosfashionbrowser.model;
+package com.horaceb.asosfashionbrowser.api.json;
 
 import com.google.gson.annotations.SerializedName;
 

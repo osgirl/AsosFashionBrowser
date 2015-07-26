@@ -19,6 +19,14 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".service.CategoryIntentService"
+            android:exported="false" />
+
+        <provider
+            android:name=".data.provider.FashionBrowserContentProvider"
+            android:authorities="com.horaceb.asosfashionbrowser"
+            android:exported="false" />
 
     </application>
 

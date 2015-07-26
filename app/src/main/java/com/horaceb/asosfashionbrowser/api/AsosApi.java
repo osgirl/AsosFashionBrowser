@@ -15,10 +15,10 @@ import retrofit.http.Query;
 public interface AsosApi {
 
     @GET("/cats_women.json")
-    void getFemaleCategories(Callback<CategoryListing> callback);
+    CategoryListing getFemaleCategories();
 
     @GET("/cats_men.json")
-    void getMaleCategories(Callback<CategoryListing> callback);
+    CategoryListing getMaleCategories();
 
     @GET("/anyproduct_details.json")
     void getProductDetails(@Query("catid") final String catId, Callback<ProductDetails> callback);

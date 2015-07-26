@@ -15,7 +15,9 @@ public class AsosApiManager {
     public static AsosApi getApi() {
         if (api == null) {
             api = new RestAdapter.Builder().setEndpoint(API_URL)
-                    .setLogLevel(RestAdapter.LogLevel.BASIC).build().create(AsosApi.class);
+                    .setLogLevel(RestAdapter.LogLevel.BASIC)
+                    .build()
+                    .create(AsosApi.class);
         }
         return api;
     }

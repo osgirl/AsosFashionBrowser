@@ -14,15 +14,16 @@ import com.horaceb.asosfashionbrowser.data.provider.FashionBrowserContract;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.RetrofitError;
-import static com.horaceb.asosfashionbrowser.IntentActions.IN_PROGRESS;
 import static com.horaceb.asosfashionbrowser.IntentActions.ERROR;
-import static com.horaceb.asosfashionbrowser.IntentActions.SUCCESSFUL;
+import static com.horaceb.asosfashionbrowser.IntentActions.IN_PROGRESS;
 import static com.horaceb.asosfashionbrowser.IntentActions.RECEIVER;
+import static com.horaceb.asosfashionbrowser.IntentActions.SUCCESSFUL;
 
 /**
  * A simple Intent service that handles the initial
  * retrieval of categories in its own thread.
+ * <p/>
+ * Uses a ContentProvider to save the results for loading later on
  */
 public class CategoryIntentService extends IntentService {
 
@@ -38,8 +39,8 @@ public class CategoryIntentService extends IntentService {
         List<Category> categories;
         CategoryApiController apiController = new CategoryApiController();
         resultReceiver.send(IN_PROGRESS, Bundle.EMPTY);
-        try {
-            categories = apiController.retrieveAllCategories();
+        categories = apiController.retrieveAllCategories();
+        if (categories != null) {
             List<ContentValues> contentValues = new ArrayList<>();
             for (Category category : categories) {
                 ContentValues values = new ContentValues();
@@ -55,11 +56,9 @@ public class CategoryIntentService extends IntentService {
             final ContentResolver resolver = getContentResolver();
             resolver.bulkInsert(FashionBrowserContract.CATEGORY_URI, contentValues.toArray(valueList));
             resultReceiver.send(SUCCESSFUL, Bundle.EMPTY);
-        } catch (RetrofitError error) {
+        } else {
             // Communicate that there has been an error via the receiver
             resultReceiver.send(ERROR, Bundle.EMPTY);
         }
-
     }
-
 }

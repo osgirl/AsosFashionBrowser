@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.horaceb.asosfashionbrowser.PreferenceHelper;
 import com.horaceb.asosfashionbrowser.R;
+import com.horaceb.asosfashionbrowser.api.json.Description;
 import com.horaceb.asosfashionbrowser.data.provider.FashionBrowserContract;
 import com.horaceb.asosfashionbrowser.service.CategoryIntentService;
 import com.horaceb.asosfashionbrowser.service.CategorySyncReceiver;
@@ -27,6 +30,7 @@ import static com.horaceb.asosfashionbrowser.IntentActions.ERROR;
 import static com.horaceb.asosfashionbrowser.IntentActions.IN_PROGRESS;
 import static com.horaceb.asosfashionbrowser.IntentActions.RECEIVER;
 import static com.horaceb.asosfashionbrowser.IntentActions.SUCCESSFUL;
+import static com.horaceb.asosfashionbrowser.PreferenceKeys.SELECTED_CATEGORY_DESCRIPTION;
 
 /**
  * The activity that houses the navigation drawer
@@ -34,13 +38,16 @@ import static com.horaceb.asosfashionbrowser.IntentActions.SUCCESSFUL;
  * <p/>
  * Created by HoraceBG on 23/07/15.
  */
-public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener {
 
     @Bind(R.id.home_drawer_layout)
     DrawerLayout drawerLayout;
 
     @Bind(R.id.home_toolbar)
     Toolbar toolbar;
+
+    @Bind(R.id.nav_drawer_gender_tabs)
+    TabLayout genderCategoryTabs;
 
     @Bind(R.id.left_nav_drawer_list)
     ListView navigationDrawerList;
@@ -64,12 +71,26 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
         setupNavigationDrawer();
 
         // Prepare to query the provider
-        getLoaderManager().initLoader(0, null, this);
+        Bundle bundle = new Bundle();
+        final String selectedDescription = getSelectedCategoryTab();
+        bundle.putString(SELECTED_CATEGORY_DESCRIPTION, selectedDescription);
+        getLoaderManager().initLoader(0, bundle, this);
 
+    }
+
+    private String getSelectedCategoryTab() {
+        PreferenceHelper preferenceHelper = new PreferenceHelper();
+        String description = preferenceHelper.getPreference(SELECTED_CATEGORY_DESCRIPTION);
+        if (description == null) {
+            // Ladies first...
+            description = Description.WOMEN.name();
+        }
+        return description;
     }
 
 
     private void setupNavigationDrawer() {
+        buildTabs();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -87,6 +108,33 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
                 0);
 
         navigationDrawerList.setAdapter(adapter);
+    }
+
+    /**
+     * Manually put together some tabs to display above the navigationDrawer.
+     * Clicking on these tabs will toggle between the category types
+     */
+    private void buildTabs() {
+        for (Description description : Description.values()) {
+            genderCategoryTabs.addTab(buildTab(description));
+        }
+        genderCategoryTabs.setOnTabSelectedListener(this);
+        String description = getSelectedCategoryTab();
+
+        for (int i = 0; i < genderCategoryTabs.getTabCount(); i++) {
+            if (genderCategoryTabs.getTabAt(i) != null) {
+                if (genderCategoryTabs.getTabAt(i).getText().equals(description)) {
+                    genderCategoryTabs.getTabAt(i).select();
+                }
+            }
+        }
+    }
+
+    private TabLayout.Tab buildTab(Description description) {
+        return genderCategoryTabs.newTab()
+                .setText(description.name())
+                .setTag(description)
+                .setContentDescription(description.name());
     }
 
     @Override
@@ -107,16 +155,47 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri categoryUri = FashionBrowserContract.CATEGORY_URI;
-        return new CursorLoader(this, categoryUri, null, null, null, null);
+
+        // Get the categories for that match the selected gender
+        String selection = null;
+        String[] selectionArgs = null;
+        if (args != null && args.containsKey(SELECTED_CATEGORY_DESCRIPTION)) {
+            selection = FashionBrowserContract.CategoryColumns.GENDER + " = ?";
+            selectionArgs = new String[]{args.getString(SELECTED_CATEGORY_DESCRIPTION)};
+        }
+
+        return new CursorLoader(this, categoryUri, null, selection, selectionArgs, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+        navigationDrawerList.setSelectionAfterHeaderView();
     }
 
     @Override
     public void onLoaderReset(Loader loader) {
+
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getText() != null) {
+            String description = tab.getText().toString();
+            new PreferenceHelper().setPreference(SELECTED_CATEGORY_DESCRIPTION, description);
+            Bundle bundle = new Bundle();
+            bundle.putString(SELECTED_CATEGORY_DESCRIPTION, description);
+            getLoaderManager().restartLoader(0, bundle, this);
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
 
     }
 }

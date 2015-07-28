@@ -40,6 +40,8 @@ import static com.horaceb.asosfashionbrowser.PreferenceKeys.SELECTED_CATEGORY_DE
  */
 public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener {
 
+    private static final int LOADER_ID = 0;
+
     @Bind(R.id.home_drawer_layout)
     DrawerLayout drawerLayout;
 
@@ -70,11 +72,9 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
         setSupportActionBar(toolbar);
         setupNavigationDrawer();
 
-        // Prepare to query the provider
-        Bundle bundle = new Bundle();
+        // Query the provider for our categories
         final String selectedDescription = getSelectedCategoryTab();
-        bundle.putString(SELECTED_CATEGORY_DESCRIPTION, selectedDescription);
-        getLoaderManager().initLoader(0, bundle, this);
+        getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
 
     }
 
@@ -110,6 +110,12 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
         navigationDrawerList.setAdapter(adapter);
     }
 
+    private Bundle buildQueryBundle(final String description) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SELECTED_CATEGORY_DESCRIPTION, description);
+        return bundle;
+    }
+
     /**
      * Manually put together some tabs to display above the navigationDrawer.
      * Clicking on these tabs will toggle between the category types
@@ -121,6 +127,7 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
         genderCategoryTabs.setOnTabSelectedListener(this);
         String description = getSelectedCategoryTab();
 
+        // Pre select tab based on preference
         for (int i = 0; i < genderCategoryTabs.getTabCount(); i++) {
             if (genderCategoryTabs.getTabAt(i) != null) {
                 if (genderCategoryTabs.getTabAt(i).getText().equals(description)) {
@@ -170,6 +177,7 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+        // Scroll to the top of the list when we switch between category lists
         navigationDrawerList.setSelectionAfterHeaderView();
     }
 
@@ -183,9 +191,7 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
         if (tab.getText() != null) {
             String description = tab.getText().toString();
             new PreferenceHelper().setPreference(SELECTED_CATEGORY_DESCRIPTION, description);
-            Bundle bundle = new Bundle();
-            bundle.putString(SELECTED_CATEGORY_DESCRIPTION, description);
-            getLoaderManager().restartLoader(0, bundle, this);
+            getLoaderManager().restartLoader(LOADER_ID, buildQueryBundle(description), this);
         }
     }
 

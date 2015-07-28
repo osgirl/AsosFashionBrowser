@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AsosFashionBrowser</string>
+    <string name="navigation_drawer_open">Navigation drawer open</string>
+    <string name="navigation_drawer_close">Navigation drawer closed</string>
 </resources>

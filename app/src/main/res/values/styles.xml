@@ -6,6 +6,12 @@
         <item name="colorPrimaryDark">@android:color/darker_gray</item>
         <item name="colorAccent">@android:color/darker_gray</item>
         <item name="android:textColor">@android:color/primary_text_light</item>
+        <item name="drawerArrowStyle">@style/NavDrawerToggleStyle</item>
+    </style>
+
+    <style name="NavDrawerToggleStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">false</item>
+        <item name="android:color">?attr/colorAccent</item>
     </style>
 
 </resources>

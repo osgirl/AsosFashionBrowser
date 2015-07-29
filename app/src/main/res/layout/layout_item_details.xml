@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/detail_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -21,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="240dp" />
 
-            <include layout="@layout/view_divider" />
+            <include layout="@layout/view_horizontal_divider" />
 
             <TextView
                 android:id="@+id/product_detail_title"
@@ -99,7 +98,7 @@
     </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/wishlist_fab"
+        android:id="@+id/add_to_wishlist_cta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

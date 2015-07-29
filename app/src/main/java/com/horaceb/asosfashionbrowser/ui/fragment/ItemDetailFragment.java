@@ -2,7 +2,6 @@ package com.horaceb.asosfashionbrowser.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,9 +23,6 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
     private static final String KEY_PRODUCT_ID = "key_product_id";
     private static final String KEY_ITEM_DETAILS = "key_item_details";
 
-    @Bind(R.id.detail_root)
-    View rootView;
-
     @Bind(R.id.item_image)
     ImageView imageView;
 
@@ -46,8 +42,7 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
     TextView productCodeView;
 
     @Bind(R.id.add_to_bag_cta)
-    Button button;
-
+    Button buyButton;
 
     public static ItemDetailFragment newInstance(@NonNull final long productId) {
         ItemDetailFragment fragment = new ItemDetailFragment();
@@ -62,7 +57,7 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
         return R.layout.fragment_content_display;
     }
 
-    @OnClick(R.id.wishlist_fab)
+    @OnClick(R.id.add_to_wishlist_cta)
     void onAddToWishlistClicked() {
         Toast.makeText(getActivity(), " FAB clicked", Toast.LENGTH_SHORT).show();
     }
@@ -70,11 +65,6 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
     @OnClick(R.id.add_to_bag_cta)
     void onAddToCartClicked() {
         Toast.makeText(getActivity(), " Add to cart clicked", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected View getContentRootView() {
-        return rootView;
     }
 
     @Override
@@ -96,8 +86,7 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
         additionalInfoView.setText(item.getAdditionalInfo());
         productCareView.setText(item.getCareInfo());
         productCodeView.setText(item.getProductId());
-        button.setText(getString(R.string.add_to_cart_button, item.getPrice()));
-
+        buyButton.setText(getString(R.string.add_to_cart_button, item.getPrice()));
     }
 
     @Override

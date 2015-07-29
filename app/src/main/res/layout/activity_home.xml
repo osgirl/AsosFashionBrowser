@@ -23,7 +23,7 @@
                 android:src="@drawable/ic_logo"/>
         </android.support.v7.widget.Toolbar>
 
-        <include layout="@layout/view_divider" />
+        <include layout="@layout/view_horizontal_divider" />
 
         <FrameLayout
             android:id="@+id/fragment_container"

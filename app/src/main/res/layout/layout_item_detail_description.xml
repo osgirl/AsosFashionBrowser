@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/large_baseline_grid_unit">
+
+        <TextView
+            android:id="@+id/product_detail_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/large_text"
+            tools:text="ASOS Mini Skirt With Pocket Front Panel" />
+
+        <TextView
+            android:id="@+id/product_detail_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/medium_text"
+            android:textStyle="bold"
+            tools:text="£30.00" />
+
+        <!--About me-->
+        <TextView
+            style="@style/ItemDescriptionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_me_label" />
+
+        <TextView
+            android:id="@+id/product_detail_additional_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Main: 96% Viscose, 4% Elastane, Trim: 100% Polyester" />
+
+        <!--Looking after me-->
+        <TextView
+            style="@style/ItemDescriptionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/care_label" />
+
+        <TextView
+            android:id="@+id/product_detail_care"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Hand wash only" />
+
+        <TextView
+            style="@style/ItemDescriptionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/product_code_label" />
+
+        <TextView
+            android:id="@+id/product_detail_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="669450" />
+
+    </LinearLayout>
+</merge>

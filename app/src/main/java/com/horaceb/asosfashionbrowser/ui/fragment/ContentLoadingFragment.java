@@ -56,16 +56,8 @@ public abstract class ContentLoadingFragment<T extends Parcelable> extends BaseF
         // Fade between progress and content view
         this.item = item;
         progressContainer.setVisibility(View.GONE);
-        getContentRootView().setVisibility(View.VISIBLE);
         bindViews(item);
     }
-
-    /**
-     * @return The resource id of the container for the content that
-     * should be displayed once loaded
-     */
-    @LayoutRes
-    protected abstract View getContentRootView();
 
     /**
      * @return The key used to store the content displayed

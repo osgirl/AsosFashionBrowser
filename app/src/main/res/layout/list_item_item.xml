@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <ImageView
@@ -11,12 +12,42 @@
         android:layout_height="wrap_content"
         android:scaleType="fitCenter" />
 
-    <TextView
-        android:id="@+id/item_price"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="@dimen/item_text_size"
-        tools:text="£35.00" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/item_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:maxLines="2"
+                android:textSize="@dimen/small_text"
+                tools:text="ASOS Mini Skirt With Pocket Front Panel" />
+
+            <ImageButton
+                android:id="@+id/list_watchlist_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_action_wishlist"
+                android:padding="@dimen/medium_baseline_grid_unit" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/item_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/small_text"
+            android:textStyle="bold"
+            tools:text="£35.00" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -14,7 +14,7 @@ import com.horaceb.asosfashionbrowser.ui.adapter.CatalogueAdapter;
 import butterknife.Bind;
 
 /**
- * Displays a collection of items based on the provided identifier
+ * Displays a collection of items based on the provided identifier.
  * Created by HoraceBG on 28/07/15.
  */
 public class ProductCatalogueFragment extends BaseFragment implements ProductCatalogueApiController.OnResponseListener {
@@ -50,7 +50,6 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         if (savedInstanceState == null) {
             // Request our list of products
             progressContainer.setVisibility(View.VISIBLE);

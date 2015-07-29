@@ -2,10 +2,12 @@
 <resources>
 
     <dimen name="small_baseline_grid_unit">4dp</dimen>
+    <dimen name="medium_baseline_grid_unit">8dp</dimen>
     <dimen name="large_baseline_grid_unit">16dp</dimen>
 
     <dimen name="item_text_size">14sp</dimen>
     <dimen name="large_text">18sp</dimen>
+    <dimen name="small_text">12sp</dimen>
 
 
 </resources>

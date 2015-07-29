@@ -79,15 +79,14 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
             intent.putExtra(RECEIVER, receiver);
             startService(intent);
 
-            // Query the provider for our categories
-            final String selectedDescription = getSelectedCategoryTab();
-            getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
-        } else {
-            // Get the fragment att
         }
 
         setSupportActionBar(toolbar);
         setupNavigationDrawer();
+
+        // Query the provider for our categories
+        final String selectedDescription = getSelectedCategoryTab();
+        getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
     }
 
     private String getSelectedCategoryTab() {
@@ -110,6 +109,7 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
         drawerLayout.setDrawerListener(toggle);
         getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getDelegate().getSupportActionBar().setHomeButtonEnabled(true);
+        getDelegate().getSupportActionBar().setDisplayShowTitleEnabled(false);
         toggle.syncState();
 
         adapter = new SimpleCursorAdapter(

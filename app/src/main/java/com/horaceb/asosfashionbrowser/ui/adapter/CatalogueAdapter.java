@@ -45,9 +45,9 @@ public class CatalogueAdapter extends ArrayAdapter<ItemListing> {
         }
 
         holder.price.setText(getItem(position).getPrice());
+        holder.titleView.setText(getItem(position).getTitle());
         Glide.with(getContext())
                 .load(getItem(position).getImageUrl())
-                .crossFade()
                 .into(holder.imageView);
 
         return convertView;
@@ -75,6 +75,9 @@ public class CatalogueAdapter extends ArrayAdapter<ItemListing> {
 
         @Bind(R.id.item_preview_image)
         ImageView imageView;
+
+        @Bind(R.id.item_title)
+        TextView titleView;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

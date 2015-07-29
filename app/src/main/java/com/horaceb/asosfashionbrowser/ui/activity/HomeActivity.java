@@ -1,5 +1,6 @@
 package com.horaceb.asosfashionbrowser.ui.activity;
 
+import android.animation.ValueAnimator;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -23,6 +25,7 @@ import com.horaceb.asosfashionbrowser.api.json.Description;
 import com.horaceb.asosfashionbrowser.data.provider.FashionBrowserContract;
 import com.horaceb.asosfashionbrowser.service.CategoryIntentService;
 import com.horaceb.asosfashionbrowser.service.CategorySyncReceiver;
+import com.horaceb.asosfashionbrowser.ui.fragment.ItemDetailFragment;
 import com.horaceb.asosfashionbrowser.ui.fragment.ProductCatalogueFragment;
 import com.horaceb.asosfashionbrowser.ui.fragment.TextFragment;
 
@@ -42,7 +45,8 @@ import static com.horaceb.asosfashionbrowser.PreferenceKeys.SELECTED_CATEGORY_DE
  * <p/>
  * Created by HoraceBG on 23/07/15.
  */
-public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener {
+public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, ProductCatalogueFragment.OnCatalogueItemSelected {
+
 
     private static final String ATTACHED_FRAGMENT_TAG = "attached_fragment_tag";
 
@@ -60,6 +64,7 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Bind(R.id.left_nav_drawer_list)
     ListView navigationDrawerList;
 
+    private ActionBarDrawerToggle toggle;
     private SimpleCursorAdapter adapter;
 
     @Override
@@ -79,15 +84,14 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
             intent.putExtra(RECEIVER, receiver);
             startService(intent);
 
-            // Query the provider for our categories
-            final String selectedDescription = getSelectedCategoryTab();
-            getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
-        } else {
-            // Get the fragment att
         }
 
         setSupportActionBar(toolbar);
         setupNavigationDrawer();
+
+        // Query the provider for our categories
+        final String selectedDescription = getSelectedCategoryTab();
+        getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
     }
 
     private String getSelectedCategoryTab() {
@@ -103,13 +107,14 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
 
     private void setupNavigationDrawer() {
         buildTabs();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawerLayout.setDrawerListener(toggle);
         getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getDelegate().getSupportActionBar().setHomeButtonEnabled(true);
+        getDelegate().getSupportActionBar().setDisplayShowTitleEnabled(false);
         toggle.syncState();
 
         adapter = new SimpleCursorAdapter(
@@ -228,5 +233,27 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onItemSelected(long productId) {
+        // Switch to the detail fragment
+        animateDrawerToggle();
+        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ItemDetailFragment.newInstance(productId), ATTACHED_FRAGMENT_TAG).addToBackStack(null).commit();
+    }
+
+    private void animateDrawerToggle() {
+        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                toggle.onDrawerSlide(drawerLayout, slideOffset);
+            }
+        });
+        anim.setInterpolator(new DecelerateInterpolator());
+        anim.setDuration(500);
+        anim.start();
     }
 }

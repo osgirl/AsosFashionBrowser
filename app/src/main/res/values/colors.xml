@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="secondary_action">#d8ecf0</color>
+    <color name="secondary_action_highlight">#ff60c5f0</color>
+    <color name="call_to_action">#ff9c32</color>
+    <color name="call_to_action_highlight">#ffff6f13</color>
+</resources>

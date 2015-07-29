@@ -6,12 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.horaceb.asosfashionbrowser.R;
 import com.horaceb.asosfashionbrowser.data.controller.ProductCatalogueApiController;
 import com.horaceb.asosfashionbrowser.data.model.Catalogue;
-import com.horaceb.asosfashionbrowser.ui.activity.HomeActivity;
 import com.horaceb.asosfashionbrowser.ui.adapter.CatalogueAdapter;
 
 import butterknife.Bind;
@@ -59,6 +57,7 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        // Register Activity as listener on item selected
         try {
             itemSelectedListener = (OnCatalogueItemSelected) activity;
         } catch (ClassCastException e) {
@@ -115,7 +114,6 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
 
     @Override
     public void onError(final String errorMessage) {
-        // Set ProgressBar GONE and display error
         progressContainer.setVisibility(View.GONE);
         errorTextView.setVisibility(View.VISIBLE);
     }

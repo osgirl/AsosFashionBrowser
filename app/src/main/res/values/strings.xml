@@ -9,4 +9,5 @@
     <string name="product_code_label">Product code</string>
     <string name="add_to_cart_button">Add to cart (%s)</string>
     <string name="add_to_wishlist_button">Save for later</string>
+    <string name="no_internet_connection">No internet connection</string>
 </resources>

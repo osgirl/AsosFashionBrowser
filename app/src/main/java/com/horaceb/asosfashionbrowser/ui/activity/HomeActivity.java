@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -22,9 +23,12 @@ import com.horaceb.asosfashionbrowser.api.json.Description;
 import com.horaceb.asosfashionbrowser.data.provider.FashionBrowserContract;
 import com.horaceb.asosfashionbrowser.service.CategoryIntentService;
 import com.horaceb.asosfashionbrowser.service.CategorySyncReceiver;
+import com.horaceb.asosfashionbrowser.ui.fragment.ProductCatalogueFragment;
+import com.horaceb.asosfashionbrowser.ui.fragment.TextFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 
 import static com.horaceb.asosfashionbrowser.IntentActions.ERROR;
 import static com.horaceb.asosfashionbrowser.IntentActions.IN_PROGRESS;
@@ -39,6 +43,8 @@ import static com.horaceb.asosfashionbrowser.PreferenceKeys.SELECTED_CATEGORY_DE
  * Created by HoraceBG on 23/07/15.
  */
 public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener {
+
+    private static final String ATTACHED_FRAGMENT_TAG = "attached_fragment_tag";
 
     private static final int LOADER_ID = 0;
 
@@ -62,20 +68,26 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
-        // Load the categories in the background for display in the navigation drawer
-        CategorySyncReceiver receiver = new CategorySyncReceiver(new Handler());
-        receiver.setReceiver(this);
-        Intent intent = new Intent(Intent.ACTION_SYNC, FashionBrowserContract.CATEGORY_URI, this, CategoryIntentService.class);
-        intent.putExtra(RECEIVER, receiver);
-        startService(intent);
+        if (savedInstanceState == null) {
+            // attach default Fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, TextFragment.newInstance("This is text")).commit();
+
+            // Load the categories in the background for display in the navigation drawer
+            CategorySyncReceiver receiver = new CategorySyncReceiver(new Handler());
+            receiver.setReceiver(this);
+            Intent intent = new Intent(Intent.ACTION_SYNC, FashionBrowserContract.CATEGORY_URI, this, CategoryIntentService.class);
+            intent.putExtra(RECEIVER, receiver);
+            startService(intent);
+
+            // Query the provider for our categories
+            final String selectedDescription = getSelectedCategoryTab();
+            getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
+        } else {
+            // Get the fragment att
+        }
 
         setSupportActionBar(toolbar);
         setupNavigationDrawer();
-
-        // Query the provider for our categories
-        final String selectedDescription = getSelectedCategoryTab();
-        getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
-
     }
 
     private String getSelectedCategoryTab() {
@@ -142,6 +154,19 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
                 .setText(description.name())
                 .setTag(description)
                 .setContentDescription(description.name());
+    }
+
+    @OnItemClick(R.id.left_nav_drawer_list)
+    void onNavDrawerItemClicked(int position) {
+        Cursor cursor = ((SimpleCursorAdapter) navigationDrawerList.getAdapter()).getCursor();
+        cursor.moveToPosition(position);
+        int index = cursor.getColumnIndex(FashionBrowserContract.CategoryColumns.CATEGORY_ID);
+        String categoryId = cursor.getString(index);
+
+        // Switch fragments
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ProductCatalogueFragment.newInstance(categoryId), ATTACHED_FRAGMENT_TAG).commit();
+        navigationDrawerList.setItemChecked(position, true);
+        drawerLayout.closeDrawer(Gravity.LEFT);
     }
 
     @Override

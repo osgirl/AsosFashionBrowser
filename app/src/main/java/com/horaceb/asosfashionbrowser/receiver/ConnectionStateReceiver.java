@@ -36,7 +36,10 @@ public class ConnectionStateReceiver extends BroadcastReceiver {
             final ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-            if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            if (networkInfo == null) {
+                connectionAvailable = false;
+                notifyListeners();
+            } else if (networkInfo.isConnectedOrConnecting()) {
                 connectionAvailable = true;
                 notifyListeners();
             } else if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, Boolean.FALSE)) {

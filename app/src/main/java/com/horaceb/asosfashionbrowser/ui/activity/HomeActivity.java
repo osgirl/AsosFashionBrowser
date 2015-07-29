@@ -1,11 +1,12 @@
 package com.horaceb.asosfashionbrowser.ui.activity;
 
-import android.animation.ValueAnimator;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,14 +16,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.animation.DecelerateInterpolator;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.horaceb.asosfashionbrowser.PreferenceHelper;
 import com.horaceb.asosfashionbrowser.R;
 import com.horaceb.asosfashionbrowser.api.json.Description;
 import com.horaceb.asosfashionbrowser.data.provider.FashionBrowserContract;
+import com.horaceb.asosfashionbrowser.receiver.ConnectionStateReceiver;
 import com.horaceb.asosfashionbrowser.service.CategoryIntentService;
 import com.horaceb.asosfashionbrowser.service.CategorySyncReceiver;
 import com.horaceb.asosfashionbrowser.ui.fragment.ItemDetailFragment;
@@ -45,7 +48,7 @@ import static com.horaceb.asosfashionbrowser.PreferenceKeys.SELECTED_CATEGORY_DE
  * <p/>
  * Created by HoraceBG on 23/07/15.
  */
-public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, ProductCatalogueFragment.OnCatalogueItemSelected {
+public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, ProductCatalogueFragment.OnCatalogueItemSelected, ConnectionStateReceiver.OnConnectionChangedListener {
 
 
     private static final String ATTACHED_FRAGMENT_TAG = "attached_fragment_tag";
@@ -64,8 +67,28 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Bind(R.id.left_nav_drawer_list)
     ListView navigationDrawerList;
 
+    @Bind(R.id.internet_connection_banner)
+    TextView internetWarningView;
+
     private ActionBarDrawerToggle toggle;
     private SimpleCursorAdapter adapter;
+
+    private ConnectionStateReceiver connectionStateReceiver;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        connectionStateReceiver = new ConnectionStateReceiver();
+        connectionStateReceiver.addListener(this);
+        registerReceiver(connectionStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        connectionStateReceiver.removeListener(this);
+        unregisterReceiver(connectionStateReceiver);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,22 +261,16 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Override
     public void onItemSelected(long productId) {
         // Switch to the detail fragment
-        animateDrawerToggle();
-        getDelegate().getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ItemDetailFragment.newInstance(productId), ATTACHED_FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
-    private void animateDrawerToggle() {
-        ValueAnimator anim = ValueAnimator.ofFloat(0, 1);
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float slideOffset = (Float) valueAnimator.getAnimatedValue();
-                toggle.onDrawerSlide(drawerLayout, slideOffset);
-            }
-        });
-        anim.setInterpolator(new DecelerateInterpolator());
-        anim.setDuration(500);
-        anim.start();
+    @Override
+    public void onConnectionAvailable() {
+        internetWarningView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onConnectionUnavailable() {
+        internetWarningView.setVisibility(View.VISIBLE);
     }
 }

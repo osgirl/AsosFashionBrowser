@@ -1,17 +1,21 @@
 package com.horaceb.asosfashionbrowser.ui.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.horaceb.asosfashionbrowser.R;
 import com.horaceb.asosfashionbrowser.data.controller.ProductCatalogueApiController;
 import com.horaceb.asosfashionbrowser.data.model.Catalogue;
+import com.horaceb.asosfashionbrowser.ui.activity.HomeActivity;
 import com.horaceb.asosfashionbrowser.ui.adapter.CatalogueAdapter;
 
 import butterknife.Bind;
+import butterknife.OnItemClick;
 
 /**
  * Displays a collection of items based on the provided identifier.
@@ -21,6 +25,10 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
 
     private static final String KEY_CATEGORY_ID = "key_category_id";
     private static final String KEY_CATALOGUE = "key_catalogue";
+
+    public interface OnCatalogueItemSelected {
+        void onItemSelected(final long productId);
+    }
 
     @Bind(R.id.item_grid)
     GridView gridView;
@@ -38,6 +46,7 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
     View progressContainer;
 
     private Catalogue catalogue;
+    private OnCatalogueItemSelected itemSelectedListener;
 
     public static ProductCatalogueFragment newInstance(final String categoryId) {
         ProductCatalogueFragment fragment = new ProductCatalogueFragment();
@@ -45,6 +54,16 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
         bundle.putString(KEY_CATEGORY_ID, categoryId);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            itemSelectedListener = (OnCatalogueItemSelected) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnCatalogueItemSelected");
+        }
     }
 
     @Override
@@ -75,6 +94,12 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
         return R.layout.fragment_item_collection;
     }
 
+
+    @OnItemClick(R.id.item_grid)
+    void onItemClicked(int position) {
+        itemSelectedListener.onItemSelected(gridView.getAdapter().getItemId(position));
+    }
+
     @Override
     public void onSuccess(final Catalogue catalogue) {
         this.catalogue = catalogue;
@@ -94,4 +119,5 @@ public class ProductCatalogueFragment extends BaseFragment implements ProductCat
         progressContainer.setVisibility(View.GONE);
         errorTextView.setVisibility(View.VISIBLE);
     }
+
 }

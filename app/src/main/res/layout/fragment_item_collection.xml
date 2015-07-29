@@ -6,8 +6,6 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <include layout="@layout/view_divider" />
-
     <RelativeLayout
         android:id="@+id/catalogue_progress_container"
         android:layout_width="match_parent"

@@ -46,7 +46,7 @@ public class Catalogue implements Parcelable {
     protected Catalogue(Parcel in) {
         description = in.readString();
         if (in.readByte() == 0x01) {
-            itemListings = new ArrayList<ItemListing>();
+            itemListings = new ArrayList<>();
             in.readList(itemListings, ItemListing.class.getClassLoader());
         } else {
             itemListings = null;

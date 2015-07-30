@@ -2,7 +2,6 @@ package com.horaceb.asosfashionbrowser.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.LayoutRes;
 import android.view.View;
 import android.widget.TextView;
 

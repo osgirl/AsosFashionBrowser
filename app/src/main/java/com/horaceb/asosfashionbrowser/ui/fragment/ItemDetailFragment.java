@@ -54,7 +54,7 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.fragment_content_display;
+        return R.layout.fragment_item_details;
     }
 
     @OnClick(R.id.add_to_wishlist_cta)

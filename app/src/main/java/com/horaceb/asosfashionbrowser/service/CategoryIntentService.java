@@ -52,7 +52,6 @@ public class CategoryIntentService extends IntentService {
 
             }
             ContentValues[] valueList = new ContentValues[]{};
-            // TODO: Do we have values already? If so - we need to replace these
             final ContentResolver resolver = getContentResolver();
             resolver.bulkInsert(FashionBrowserContract.CATEGORY_URI, contentValues.toArray(valueList));
             resultReceiver.send(SUCCESSFUL, Bundle.EMPTY);

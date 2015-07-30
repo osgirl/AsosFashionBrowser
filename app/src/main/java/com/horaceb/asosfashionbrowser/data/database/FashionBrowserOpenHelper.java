@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by HoraceBG on 25/07/15.
+ * Initialises the database
  */
 public class FashionBrowserOpenHelper extends SQLiteOpenHelper {
 
@@ -18,12 +18,13 @@ public class FashionBrowserOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DatabaseSchema.CREATE_TABLE_CATEGORY);
+        db.execSQL(DatabaseSchema.CREATE_TABLE_SHOPPING_CART);
+        db.execSQL(DatabaseSchema.CREATE_TABLE_WISHLIST);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO: Should have an upgrade strategy
-        db.execSQL(DatabaseSchema.DROP_TABLE_CATEGORY);
         onCreate(db);
     }
 }

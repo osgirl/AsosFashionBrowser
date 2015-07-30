@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.horaceb.asosfashionbrowser.R;
 import com.horaceb.asosfashionbrowser.data.controller.ProductDetailsApiController;
 import com.horaceb.asosfashionbrowser.data.model.ItemDetail;
-import com.horaceb.asosfashionbrowser.ui.adapter.ProductImagePagerAdapter;
+import com.horaceb.asosfashionbrowser.ui.adapter.FragmentPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +84,7 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
 
     @Override
     protected void bindViews(ItemDetail item) {
-        viewPager.setAdapter(new ProductImagePagerAdapter(getFragmentManager(), buildFragments(item.getImageUrls())));
+        viewPager.setAdapter(new FragmentPagerAdapter(getFragmentManager(), buildFragments(item.getImageUrls())));
         titleView.setText(item.getName());
         priceView.setText(item.getPrice());
         additionalInfoView.setText(item.getAdditionalInfo());

@@ -13,6 +13,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -22,9 +24,9 @@ import com.horaceb.asosfashionbrowser.PreferenceHelper;
 import com.horaceb.asosfashionbrowser.R;
 import com.horaceb.asosfashionbrowser.api.json.Description;
 import com.horaceb.asosfashionbrowser.data.provider.FashionBrowserContract;
-import com.horaceb.asosfashionbrowser.receiver.ConnectionStateReceiver;
 import com.horaceb.asosfashionbrowser.service.CategoryIntentService;
 import com.horaceb.asosfashionbrowser.service.CategorySyncReceiver;
+import com.horaceb.asosfashionbrowser.ui.fragment.CartFragment;
 import com.horaceb.asosfashionbrowser.ui.fragment.ItemDetailFragment;
 import com.horaceb.asosfashionbrowser.ui.fragment.ProductCatalogueFragment;
 import com.horaceb.asosfashionbrowser.util.SyncHelper;
@@ -46,8 +48,8 @@ import static com.horaceb.asosfashionbrowser.PreferenceKeys.USER_BEEN_HERE;
  * <p/>
  * Created by HoraceBG on 23/07/15.
  */
-public class HomeActivity extends NetworkAwareActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, ProductCatalogueFragment.OnCatalogueItemSelected, ConnectionStateReceiver.OnConnectionChangedListener {
-
+public class HomeActivity extends NetworkAwareActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>,
+        TabLayout.OnTabSelectedListener, ProductCatalogueFragment.OnCatalogueItemSelected {
 
     private static final String ATTACHED_FRAGMENT_TAG = "attached_fragment_tag";
 
@@ -218,8 +220,10 @@ public class HomeActivity extends NetworkAwareActivity implements CategorySyncRe
         adapter.swapCursor(data);
         data.moveToNext();
         int index = data.getColumnIndex(FashionBrowserContract.CategoryColumns.CATEGORY_ID);
-        // Load default content
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ProductCatalogueFragment.newInstance(data.getString(index))).commit();
+        // Load default content if there's nothing yet attached
+        if (getSupportFragmentManager().findFragmentByTag(ATTACHED_FRAGMENT_TAG) == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ProductCatalogueFragment.newInstance(data.getString(index)), ATTACHED_FRAGMENT_TAG).commit();
+        }
         // Scroll to the top of the list when we switch between category lists
         navigationDrawerList.setSelectionAfterHeaderView();
     }
@@ -257,5 +261,20 @@ public class HomeActivity extends NetworkAwareActivity implements CategorySyncRe
     @Override
     protected View getConnectionWarningView() {
         return internetWarningView;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_cart:
+                // TODO: Switch to CartFragment
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

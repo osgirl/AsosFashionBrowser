@@ -54,7 +54,9 @@ public abstract class ContentLoadingFragment<T extends Parcelable> extends BaseF
     public void onSuccess(final T item) {
         // Fade between progress and content view
         this.item = item;
-        progressContainer.setVisibility(View.GONE);
+        if (progressContainer != null) {
+            progressContainer.setVisibility(View.GONE);
+        }
         bindViews(item);
     }
 
@@ -75,6 +77,10 @@ public abstract class ContentLoadingFragment<T extends Parcelable> extends BaseF
      * @param item The content to display in the Fragment
      */
     protected abstract void bindViews(T item);
+
+    public T getItem() {
+        return item;
+    }
 
     @Override
     public void onError(String errorMessage) {

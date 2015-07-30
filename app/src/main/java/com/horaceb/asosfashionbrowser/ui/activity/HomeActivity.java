@@ -3,17 +3,14 @@ package com.horaceb.asosfashionbrowser.ui.activity;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
@@ -31,6 +28,7 @@ import com.horaceb.asosfashionbrowser.service.CategorySyncReceiver;
 import com.horaceb.asosfashionbrowser.ui.fragment.ItemDetailFragment;
 import com.horaceb.asosfashionbrowser.ui.fragment.ProductCatalogueFragment;
 import com.horaceb.asosfashionbrowser.ui.fragment.TextFragment;
+import com.horaceb.asosfashionbrowser.util.SyncHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,6 +39,7 @@ import static com.horaceb.asosfashionbrowser.IntentActions.IN_PROGRESS;
 import static com.horaceb.asosfashionbrowser.IntentActions.RECEIVER;
 import static com.horaceb.asosfashionbrowser.IntentActions.SUCCESSFUL;
 import static com.horaceb.asosfashionbrowser.PreferenceKeys.SELECTED_CATEGORY_DESCRIPTION;
+import static com.horaceb.asosfashionbrowser.PreferenceKeys.USER_BEEN_HERE;
 
 /**
  * The activity that houses the navigation drawer
@@ -48,7 +47,7 @@ import static com.horaceb.asosfashionbrowser.PreferenceKeys.SELECTED_CATEGORY_DE
  * <p/>
  * Created by HoraceBG on 23/07/15.
  */
-public class HomeActivity extends AppCompatActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, ProductCatalogueFragment.OnCatalogueItemSelected, ConnectionStateReceiver.OnConnectionChangedListener {
+public class HomeActivity extends NetworkAwareActivity implements CategorySyncReceiver.Receiver, LoaderManager.LoaderCallbacks<Cursor>, TabLayout.OnTabSelectedListener, ProductCatalogueFragment.OnCatalogueItemSelected, ConnectionStateReceiver.OnConnectionChangedListener {
 
 
     private static final String ATTACHED_FRAGMENT_TAG = "attached_fragment_tag";
@@ -70,51 +69,44 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Bind(R.id.internet_connection_banner)
     TextView internetWarningView;
 
-    private ActionBarDrawerToggle toggle;
     private SimpleCursorAdapter adapter;
-
-    private ConnectionStateReceiver connectionStateReceiver;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        connectionStateReceiver = new ConnectionStateReceiver();
-        connectionStateReceiver.addListener(this);
-        registerReceiver(connectionStateReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        connectionStateReceiver.removeListener(this);
-        unregisterReceiver(connectionStateReceiver);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
+        PreferenceHelper helper = new PreferenceHelper();
+        if (!helper.getBooleanPreference(USER_BEEN_HERE)) {
+            // Show the intro instead of this Activity for new users
+            Intent intent = new Intent(this, IntroActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            setContentView(R.layout.activity_home);
+            ButterKnife.bind(this);
 
-        if (savedInstanceState == null) {
-            // attach default Fragment
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, TextFragment.newInstance("This is text")).commit();
+            if (savedInstanceState == null) {
+                // attach default Fragment
 
-            // Load the categories in the background for display in the navigation drawer
-            CategorySyncReceiver receiver = new CategorySyncReceiver(new Handler());
-            receiver.setReceiver(this);
-            Intent intent = new Intent(Intent.ACTION_SYNC, FashionBrowserContract.CATEGORY_URI, this, CategoryIntentService.class);
-            intent.putExtra(RECEIVER, receiver);
-            startService(intent);
+                // TODO: Get the selected gender in the drawer and display the results of the first category
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, TextFragment.newInstance("This is text")).commit();
 
+                if (SyncHelper.isTimeToSyncCategories()) {
+                    // Load the categories in the background for display in the navigation drawer
+                    CategorySyncReceiver receiver = new CategorySyncReceiver(new Handler());
+                    receiver.setReceiver(this);
+                    Intent intent = new Intent(Intent.ACTION_SYNC, FashionBrowserContract.CATEGORY_URI, this, CategoryIntentService.class);
+                    intent.putExtra(RECEIVER, receiver);
+                    startService(intent);
+                }
+            }
+
+            setSupportActionBar(toolbar);
+            setupNavigationDrawer();
+
+            // Query the provider for our categories
+            final String selectedDescription = getSelectedCategoryTab();
+            getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
         }
-
-        setSupportActionBar(toolbar);
-        setupNavigationDrawer();
-
-        // Query the provider for our categories
-        final String selectedDescription = getSelectedCategoryTab();
-        getLoaderManager().initLoader(LOADER_ID, buildQueryBundle(selectedDescription), this);
     }
 
     private String getSelectedCategoryTab() {
@@ -130,7 +122,7 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
 
     private void setupNavigationDrawer() {
         buildTabs();
-        toggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
@@ -272,5 +264,10 @@ public class HomeActivity extends AppCompatActivity implements CategorySyncRecei
     @Override
     public void onConnectionUnavailable() {
         internetWarningView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected View getConnectionWarningView() {
+        return internetWarningView;
     }
 }

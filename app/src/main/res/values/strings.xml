@@ -10,4 +10,11 @@
     <string name="add_to_cart_button">Add to cart (%s)</string>
     <string name="add_to_wishlist_button">Save for later</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="done">Done</string>
+    <string name="next">Next</string>
+    <string name="error">Error</string>
+    <string name="no_sync_error">Could not download data. Would you like to try again?</string>
+    <string name="welcome_message">Welcome to my demo application.</string>
+    <string name="message_about_app">This app gets the appropriate categories from the api and stores them in an SQLite database.\n\nThat\'s actually happening now, as you read this text!\nSelecting a category will display the items of that category in what I refer to throughout the code as a Catalogue.\n\nSelecting an item will open up the detail view that includes a ViewPager of the product images and more details.</string>
+    <string name="final_message">What I didn\'t complete.\n\n<b>Add item to wishlist</b>\n<b>Highlight items saved to watchlist in the category view</b>\n<b>My own implementation of an image cache/ loading system (Ran out of time!)</b>\n<b>General bits of finesse (transition animations, smoother experience loading category view etc)</b>\n\n<b>I hope you like it!</b></string>
 </resources>

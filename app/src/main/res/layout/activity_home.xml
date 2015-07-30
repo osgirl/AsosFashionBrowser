@@ -26,17 +26,7 @@
 
         <include layout="@layout/view_horizontal_divider" />
 
-        <TextView
-            android:id="@+id/internet_connection_banner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/holo_red_light"
-            android:gravity="center"
-            android:padding="@dimen/large_baseline_grid_unit"
-            android:text="@string/no_internet_connection"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/large_text"
-            android:visibility="gone" />
+        <include layout="@layout/layout_connection_warning_banner" />
 
         <FrameLayout
             android:id="@+id/fragment_container"

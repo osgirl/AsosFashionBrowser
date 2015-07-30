@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/internet_connection_banner"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/holo_red_light"
+    android:gravity="center"
+    android:padding="@dimen/large_baseline_grid_unit"
+    android:text="@string/no_internet_connection"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/large_text"
+    android:visibility="gone" />

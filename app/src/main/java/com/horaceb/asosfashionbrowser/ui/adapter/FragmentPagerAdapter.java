@@ -10,12 +10,12 @@ import java.util.List;
 /**
  * A simple adapter for fragments in a ViewPager
  */
-public class ProductImagePagerAdapter extends FragmentStatePagerAdapter {
+public class FragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @NonNull
     private final List<Fragment> fragments;
 
-    public ProductImagePagerAdapter(FragmentManager fm, @NonNull final List<Fragment> fragments) {
+    public FragmentPagerAdapter(FragmentManager fm, @NonNull final List<Fragment> fragments) {
         super(fm);
         this.fragments = fragments;
     }

@@ -24,7 +24,27 @@ public class PreferenceHelper {
         editor.apply();
     }
 
+    public void setPreference(@NonNull final String key, final long value) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong(key, value);
+        editor.apply();
+    }
+
+    public void setPreference(@NonNull final String key, final boolean value) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
     public String getPreference(final String key) {
         return preferences.getString(key, null);
+    }
+
+    public long getLongPreference(final String key) {
+        return preferences.getLong(key, 0);
+    }
+
+    public boolean getBooleanPreference(final String key) {
+        return preferences.getBoolean(key, false);
     }
 }

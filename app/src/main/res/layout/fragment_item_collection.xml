@@ -1,62 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/catalogue_progress_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:visibility="gone">
-
-        <ProgressBar
-            style="?attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            tools:visibility="visible" />
-
-    </RelativeLayout>
+    <include layout="@layout/layout_progress_container" />
 
     <include layout="@layout/layout_error_message" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/catalogue_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="@dimen/small_baseline_grid_unit"
-            android:textSize="@dimen/large_text"
-            tools:text="Shoes" />
-
-        <TextView
-            android:id="@+id/catalogue_item_count"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center" />
-
-        <GridView
-            android:id="@+id/item_grid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="true"
-            android:drawSelectorOnTop="true"
-            android:horizontalSpacing="@dimen/medium_baseline_grid_unit"
-            android:numColumns="@integer/num_columns_cproduct_collection_grid"
-            android:padding="@dimen/medium_baseline_grid_unit"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="@dimen/medium_baseline_grid_unit"
-            tools:listitem="@layout/list_item_item" />
-
-    </LinearLayout>
+    <include layout="@layout/layout_product_catalogue" />
 
 </LinearLayout>

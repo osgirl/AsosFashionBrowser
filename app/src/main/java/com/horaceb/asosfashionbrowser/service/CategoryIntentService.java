@@ -20,7 +20,7 @@ import static com.horaceb.asosfashionbrowser.IntentActions.RECEIVER;
 import static com.horaceb.asosfashionbrowser.IntentActions.SUCCESSFUL;
 
 /**
- * A simple Intent service that handles the initial
+ * A simple Intent service that handles the
  * retrieval of categories in its own thread.
  * <p/>
  * Uses a ContentProvider to save the results for loading later on
@@ -41,6 +41,7 @@ public class CategoryIntentService extends IntentService {
         resultReceiver.send(IN_PROGRESS, Bundle.EMPTY);
         categories = apiController.retrieveAllCategories();
         if (categories != null) {
+            // Store the categories in the database
             List<ContentValues> contentValues = new ArrayList<>();
             for (Category category : categories) {
                 ContentValues values = new ContentValues();

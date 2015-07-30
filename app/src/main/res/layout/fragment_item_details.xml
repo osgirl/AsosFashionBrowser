@@ -9,7 +9,6 @@
 
     <include layout="@layout/layout_error_message" />
 
-    <include
-        layout="@layout/layout_item_details" />
+    <include layout="@layout/layout_item_details" />
 
 </LinearLayout>

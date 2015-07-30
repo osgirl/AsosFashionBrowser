@@ -5,7 +5,6 @@ import android.net.Uri;
 
 /**
  * Simple contract class to help with mapping to tables.
- * Created by HoraceBG on 25/07/15.
  */
 public class FashionBrowserContract {
 

@@ -1,6 +1,7 @@
 package com.horaceb.asosfashionbrowser.data.controller;
 
 import com.horaceb.asosfashionbrowser.api.AsosApiManager;
+import com.horaceb.asosfashionbrowser.api.OnResultListener;
 import com.horaceb.asosfashionbrowser.api.json.ProductCategoryListings;
 import com.horaceb.asosfashionbrowser.data.model.Catalogue;
 
@@ -14,15 +15,9 @@ import retrofit.client.Response;
  */
 public class ProductCatalogueApiController implements Callback<ProductCategoryListings> {
 
-    private OnResponseListener listener;
+    private OnResultListener<Catalogue> listener;
 
-    public interface OnResponseListener {
-        void onSuccess(final Catalogue catalogue);
-
-        void onError(final String errorMessage);
-    }
-
-    public void getProductByCategory(final String catId, final OnResponseListener listener) {
+    public void getProductByCategory(final String catId, final OnResultListener<Catalogue> listener) {
         this.listener = listener;
         AsosApiManager.getApi().getProductsByCategory(catId, this);
     }
@@ -31,8 +26,7 @@ public class ProductCatalogueApiController implements Callback<ProductCategoryLi
     public void success(ProductCategoryListings productCategoryListings, Response response) {
         // Transform
         ProductListingTransformer transformer = new ProductListingTransformer();
-        Catalogue catalogue = transformer.transform(productCategoryListings);
-        listener.onSuccess(catalogue);
+        listener.onSuccess(transformer.transform(productCategoryListings));
     }
 
     @Override

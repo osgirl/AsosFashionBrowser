@@ -12,9 +12,6 @@ import android.text.TextUtils;
 import com.horaceb.asosfashionbrowser.data.database.DatabaseSchema;
 import com.horaceb.asosfashionbrowser.data.database.FashionBrowserOpenHelper;
 
-/**
- * Created by HoraceBG on 23/07/15.
- */
 public class FashionBrowserContentProvider extends ContentProvider {
 
     public static final int CATEGORY_LIST = 1;

@@ -15,6 +15,8 @@ public class FashionBrowserContract {
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final Uri CATEGORY_URI = Uri.parse("content://" + AUTHORITY + "/" + CATEGORY_TABLE);
+    public static final Uri SHOPPING_CART_URI = Uri.parse("content://" + AUTHORITY + "/" + SHOPPING_CART_TABLE);
+    public static final Uri WISHLIST_URI = Uri.parse("content://" + AUTHORITY + "/" + WISHLIST_TABLE);
 
     public interface CategoryColumns {
         String ID = "_id";

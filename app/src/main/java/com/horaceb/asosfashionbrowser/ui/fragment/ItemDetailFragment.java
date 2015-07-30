@@ -1,7 +1,7 @@
 package com.horaceb.asosfashionbrowser.ui.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.widget.Button;
@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.horaceb.asosfashionbrowser.R;
 import com.horaceb.asosfashionbrowser.data.controller.ProductDetailsApiController;
+import com.horaceb.asosfashionbrowser.data.database.InsertRecordTask;
 import com.horaceb.asosfashionbrowser.data.model.ItemDetail;
 import com.horaceb.asosfashionbrowser.ui.adapter.FragmentPagerAdapter;
 
@@ -48,7 +49,7 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
     @Bind(R.id.add_to_bag_cta)
     Button buyButton;
 
-    public static ItemDetailFragment newInstance(@NonNull final long productId) {
+    public static ItemDetailFragment newInstance(final long productId) {
         ItemDetailFragment fragment = new ItemDetailFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(KEY_PRODUCT_ID, productId);
@@ -63,12 +64,14 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
 
     @OnClick(R.id.add_to_wishlist_cta)
     void onAddToWishlistClicked() {
-        Toast.makeText(getActivity(), " FAB clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Not implemented", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.add_to_bag_cta)
     void onAddToCartClicked() {
-        Toast.makeText(getActivity(), " Add to cart clicked", Toast.LENGTH_SHORT).show();
+        // Task
+        InsertRecordTask task = new InsertRecordTask(getItem(), getActivity().getApplicationContext());
+        task.execute();
     }
 
     @Override

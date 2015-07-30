@@ -148,6 +148,12 @@ public class FashionBrowserContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        SQLiteDatabase database = helper.getWritableDatabase();
+        switch (URI_MATCHER.match(uri)) {
+            case SHOPPING_CART_LIST:
+                return database.update(DatabaseSchema.TABLE_SHOPPING_CART, values, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("This URI is not supported for update: " + uri);
+        }
     }
 }

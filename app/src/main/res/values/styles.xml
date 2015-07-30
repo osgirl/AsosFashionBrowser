@@ -23,7 +23,6 @@
     <style name="CtaButtonStyle">
         <item name="android:layout_margin">@dimen/medium_baseline_grid_unit</item>
         <item name="android:textSize">@dimen/large_text</item>
-
     </style>
 
 </resources>

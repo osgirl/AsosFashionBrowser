@@ -2,15 +2,19 @@ package com.horaceb.asosfashionbrowser.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.horaceb.asosfashionbrowser.R;
 import com.horaceb.asosfashionbrowser.data.controller.ProductDetailsApiController;
 import com.horaceb.asosfashionbrowser.data.model.ItemDetail;
+import com.horaceb.asosfashionbrowser.ui.adapter.ProductImagePagerAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -23,8 +27,8 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
     private static final String KEY_PRODUCT_ID = "key_product_id";
     private static final String KEY_ITEM_DETAILS = "key_item_details";
 
-    @Bind(R.id.item_image)
-    ImageView imageView;
+    @Bind(R.id.item_image_pager)
+    ViewPager viewPager;
 
     @Bind(R.id.product_detail_title)
     TextView titleView;
@@ -80,13 +84,21 @@ public class ItemDetailFragment extends ContentLoadingFragment<ItemDetail> {
 
     @Override
     protected void bindViews(ItemDetail item) {
-        Glide.with(this).load(item.getImageUrls().get(0)).into(imageView);
+        viewPager.setAdapter(new ProductImagePagerAdapter(getFragmentManager(), buildFragments(item.getImageUrls())));
         titleView.setText(item.getName());
         priceView.setText(item.getPrice());
         additionalInfoView.setText(item.getAdditionalInfo());
         productCareView.setText(item.getCareInfo());
         productCodeView.setText(item.getProductId());
         buyButton.setText(getString(R.string.add_to_cart_button, item.getPrice()));
+    }
+
+    private List<Fragment> buildFragments(List<String> imageUrls) {
+        List<Fragment> fragments = new ArrayList<>();
+        for (String imageUrl : imageUrls) {
+            fragments.add(ProductImageFragment.newInstance(imageUrl));
+        }
+        return fragments;
     }
 
     @Override

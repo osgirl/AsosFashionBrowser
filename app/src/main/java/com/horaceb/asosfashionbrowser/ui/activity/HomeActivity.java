@@ -27,7 +27,6 @@ import com.horaceb.asosfashionbrowser.service.CategoryIntentService;
 import com.horaceb.asosfashionbrowser.service.CategorySyncReceiver;
 import com.horaceb.asosfashionbrowser.ui.fragment.ItemDetailFragment;
 import com.horaceb.asosfashionbrowser.ui.fragment.ProductCatalogueFragment;
-import com.horaceb.asosfashionbrowser.ui.fragment.TextFragment;
 import com.horaceb.asosfashionbrowser.util.SyncHelper;
 
 import butterknife.Bind;
@@ -85,11 +84,6 @@ public class HomeActivity extends NetworkAwareActivity implements CategorySyncRe
             ButterKnife.bind(this);
 
             if (savedInstanceState == null) {
-                // attach default Fragment
-
-                // TODO: Get the selected gender in the drawer and display the results of the first category
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, TextFragment.newInstance("This is text")).commit();
-
                 if (SyncHelper.isTimeToSyncCategories()) {
                     // Load the categories in the background for display in the navigation drawer
                     CategorySyncReceiver receiver = new CategorySyncReceiver(new Handler());
@@ -222,6 +216,10 @@ public class HomeActivity extends NetworkAwareActivity implements CategorySyncRe
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+        data.moveToNext();
+        int index = data.getColumnIndex(FashionBrowserContract.CategoryColumns.CATEGORY_ID);
+        // Load default content
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ProductCatalogueFragment.newInstance(data.getString(index))).commit();
         // Scroll to the top of the list when we switch between category lists
         navigationDrawerList.setSelectionAfterHeaderView();
     }
@@ -254,16 +252,6 @@ public class HomeActivity extends NetworkAwareActivity implements CategorySyncRe
     public void onItemSelected(long productId) {
         // Switch to the detail fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, ItemDetailFragment.newInstance(productId), ATTACHED_FRAGMENT_TAG).addToBackStack(null).commit();
-    }
-
-    @Override
-    public void onConnectionAvailable() {
-        internetWarningView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onConnectionUnavailable() {
-        internetWarningView.setVisibility(View.VISIBLE);
     }
 
     @Override
